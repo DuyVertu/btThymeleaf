@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Category Management</title>
+</head>
+<body>
+    <header th:replace="fragments/header :: header"></header>
+    <div layout:fragment="content"></div>
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+<body>
+    <div layout:fragment="content">
+        <form th:action="@{/categories}" method="get">
+            <input type="text" name="keyword" th:value="${keyword}" placeholder="Search..." />
+            <button type="submit">Search</button>
+        </form>
+
+        <table>
+            <tr><th>ID</th><th>Name</th><th>Actions</th></tr>
+            <tr th:each="category : ${page.content}">
+                <td th:text="${category.id}"></td>
+                <td th:text="${category.name}"></td>
+                <td>
+                    <a th:href="@{/categories/edit/{id}(id=${category.id})}">Edit</a>
+                    <a th:href="@{/categories/delete/{id}(id=${category.id})}">Delete</a>
+                </td>
+            </tr>
+        </table>
+
+        <div>
+            <span th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}">
+                <a th:href="@{/categories(keyword=${keyword}, page=${i})}" th:text="${i + 1}">1</a>
+            </span>
+        </div>
+    </div>
+</body>
+</html>
